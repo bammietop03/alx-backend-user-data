@@ -12,24 +12,40 @@ class Auth:
     def require_auth(self, path: str,
                      excluded_paths: List[str]) -> bool:
         """ returns False """
-        if path is None:
+        if path is None or excluded_paths is None or excluded_paths == []:
             return True
 
-        if excluded_paths is None or len(excluded_paths) == 0:
+        l_path = len(path)
+        if l_path == 0:
             return True
 
-        normalized_path = path if path.endswith('/') else path + '/'
+        slash_path = True if path[l_path - 1] == '/' else False
 
-        for excluded_path in excluded_paths:
-            normalized_excluded_path = excluded_path if excluded_path.endswith('/') else excluded_path + '/'
-            
-            if normalized_excluded_path.endswith('*'):
-                if normalized_path.startswith(normalized_excluded_path[:-1]):
+        tmp_path = path
+        if not slash_path:
+            tmp_path += '/'
+
+        for exc in excluded_paths:
+            l_exc = len(exc)
+            if l_exc == 0:
+                continue
+
+            if exc[l_exc - 1] != '*':
+                if tmp_path == exc:
                     return False
-            elif normalized_path == normalized_excluded_path:
-                return False
+            else:
+                if exc[:-1] == path[:l_exc - 1]:
+                    return False
 
         return True
+        # if path is None:
+        #     return True
+
+        # if excluded_paths is None or len(excluded_paths) == 0:
+        #     return True
+
+        # normalized_path = path if path.endswith('/') else path + '/'
+
         # for N_path in excluded_paths:
         #     if N_path.endswith('/') and normalized_path == N_path:
         #         return False
