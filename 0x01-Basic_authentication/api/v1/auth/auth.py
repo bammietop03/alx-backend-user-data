@@ -20,11 +20,21 @@ class Auth:
 
         normalized_path = path if path.endswith('/') else path + '/'
 
-        for N_path in excluded_paths:
-            if N_path.endswith('/') and normalized_path == N_path:
+        for excluded_path in excluded_paths:
+            normalized_excluded_path = excluded_path if excluded_path.endswith('/') else excluded_path + '/'
+            
+            if normalized_excluded_path.endswith('*'):
+                if normalized_path.startswith(normalized_excluded_path[:-1]):
+                    return False
+            elif normalized_path == normalized_excluded_path:
                 return False
 
         return True
+        # for N_path in excluded_paths:
+        #     if N_path.endswith('/') and normalized_path == N_path:
+        #         return False
+
+        # return True
 
     def authorization_header(self, request=None) -> str:
         """ returns None - request will be the Flask request object"""
