@@ -99,7 +99,7 @@ class BasicAuth(Auth):
         if decoded_token is None:
             return None
         user_details = self.extract_user_credentials(decoded_token)
-        if base64_token is (None, None):
+        if base64_token == (None, None):
             return None
         user_object = self.user_object_from_credentials(user_details[0],
                                                         user_details[1])
