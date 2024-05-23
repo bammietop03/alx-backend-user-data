@@ -51,8 +51,9 @@ def check_auth():
         return
 
     request.current_user = auth.current_user(request)
-    path_list = ['/api/v1/status/', '/api/v1/unauthorized/',
-                 '/api/v1/forbidden/', '/api/v1/auth_session/login/']
+    path_list = ['/api/v1/status/',
+                 '/api/v1/unauthorized/', '/api/v1/forbidden/',
+                 '/api/v1/auth_session/login/']
     if auth.require_auth(request.path, path_list):
         if auth.session_cookie(request) is None:
             abort(401)
