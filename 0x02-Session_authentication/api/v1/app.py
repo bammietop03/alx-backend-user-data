@@ -50,7 +50,7 @@ def check_auth():
     if auth is None:
         return
 
-    request.current_user = auth.current_user(request)
+    setattr(request, "current_user", auth.current_user(request))
     path_list = ['/api/v1/status/', '/api/v1/unauthorized/',
                  '/api/v1/forbidden/', '/api/v1/auth_session/login/']
     if auth.require_auth(request.path, path_list):
